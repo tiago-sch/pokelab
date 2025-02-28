@@ -27,6 +27,7 @@ router.get("/pokedex", async (req, res) => {
                 id
                 name
                 artwork
+                image
               }
             }
           }
@@ -35,6 +36,12 @@ router.get("/pokedex", async (req, res) => {
     }
   );
   const data = await request.json();
+
+  if (data.errors) {
+    res.send(data.errors);
+    return;
+  }
+
   res.send(data.data.pokemons.results);
 });
 
@@ -52,9 +59,9 @@ router.get("/infos", async (_, res) => {
           {
             types {
               results {
-                  name
-                  id
-                  url
+                name
+                id
+                url
               }
             }
           }
@@ -75,7 +82,7 @@ router.get("/pokemon/:name", async (req, res) => {
   const pokemon = req.params.name;
 
   const pokemonInfo = await fetch(
-    "POKEAPI_GRAPHQL",
+    POKEAPI_GRAPHQL,
     {
       method: "POST",
       headers: {
@@ -85,64 +92,74 @@ router.get("/pokemon/:name", async (req, res) => {
         query: `
           {
             pokemon(name: "${pokemon}") {
-                id
-                sprites {
-                    front_default
-                    front_female
-                    front_shiny
-                    front_shiny_female
-                    back_default
-                    back_female
-                    back_shiny
-                    back_shiny_female
+              id
+              sprites {
+                front_default
+                front_female
+                front_shiny
+                front_shiny_female
+                back_default
+                back_female
+                back_shiny
+                back_shiny_female
+              }
+              height
+              weight
+              name
+              types {
+                type {
+                  name
                 }
-                height
-                weight
-                name
-                types {
-                    type {
-                        name
-                    }
+              }
+              location_area_encounters
+              stats {
+                stat {
+                  name
                 }
-                location_area_encounters
-                stats {
-                    stat {
-                        name
-                    }
-                    base_stat
+                base_stat
+              }
+              base_experience
+              location_area_encounters
+              abilities {
+                ability {
+                  name
+                  url
                 }
-                base_experience
-                location_area_encounters
-                abilities {
-                    ability {
-                        name
-                        url
-                    }
+              }
+              order
+              message
+              moves {
+                move {
+                  name
+                  url
                 }
-                order
-                message
-                moves {
-                    move {
-                        name
-                        url
-                    }
-                }
+              }
             }
-        }
+          }
         `
       })
     }
   );
   const data = await pokemonInfo.json();
-  const pokemonData = data.data.pokemon;
 
-  res.send({
-    ...pokemonData,
-    types: pokemonData.types.map(({ type }) => type.name),
-    stats: pokemonData.stats.map(({ stat, base_stat}) => ({ stat: stat.name, base_stat })),
-    abilities: pokemonData.abilities.map(({ ability }) => ability),
-    moves: pokemonData.moves.map(({ move }) => move),
-  });
+  if (data.errors) {
+    res.send(data.errors);
+    return;
+  }
+
+  try {
+    const pokemonData = data.data.pokemon;
+    
+    res.send({
+      ...pokemonData,
+      types: pokemonData.types.map(({ type }) => type.name),
+      stats: pokemonData.stats.map(({ stat, base_stat}) => ({ stat: stat.name, base_stat })),
+      abilities: pokemonData.abilities.map(({ ability }) => ability),
+      moves: pokemonData.moves.map(({ move }) => move),
+    });
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 // matchup
@@ -164,24 +181,24 @@ router.post("/matchup/", async (req, res) => {
         query: `
           {
             getTypeMatchup(primaryType: ${primary}${ secondary ? `, secondaryType:${secondary}` : ""}) {
-                attacking {
-                    doubleEffectiveTypes
-                    doubleResistedTypes
-                    effectiveTypes
-                    effectlessTypes
-                    normalTypes
-                    resistedTypes
-                }
-                defending {
-                    doubleEffectiveTypes
-                    doubleResistedTypes
-                    effectiveTypes
-                    effectlessTypes
-                    normalTypes
-                    resistedTypes
-                }
+              attacking {
+                doubleEffectiveTypes
+                doubleResistedTypes
+                effectiveTypes
+                effectlessTypes
+                normalTypes
+                resistedTypes
+              }
+              defending {
+                doubleEffectiveTypes
+                doubleResistedTypes
+                effectiveTypes
+                effectlessTypes
+                normalTypes
+                resistedTypes
+              }
             }
-        }
+          }
         `
       })
     }
@@ -190,6 +207,7 @@ router.post("/matchup/", async (req, res) => {
 
   if (data.errors) {
     res.send(data.errors);
+    return;
   }
   
   res.send(data.data.getTypeMatchup);
