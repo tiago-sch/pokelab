@@ -18,7 +18,7 @@ function RouteComponent() {
 
   return (
     <div>
-      <h2 className="text-center font-bold text-lg pt-10 py-5">POKE-DEX</h2>
+      <h2 className="text-center font-bold text-lg py-5">POKE-DEX</h2>
       <PokedexList />
     </div>
   )

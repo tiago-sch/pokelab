@@ -28,7 +28,7 @@ export const Route = createRootRoute({
           Pokedex
         </Link>
       </div>
-      <hr />
+      <hr className="pb-10" />
       <main className="container mx-auto">
         <Outlet />
       </main>
