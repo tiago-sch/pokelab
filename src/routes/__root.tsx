@@ -20,7 +20,7 @@ const AppWrapper = ({ children }: PropsWithChildren) => (
 export const Route = createRootRoute({
   component: () => (
     <AppWrapper>
-      <div className="p-2 flex gap-2">
+      <div className="container mx-auto p-2 flex gap-2">
         <Link to="/" className="active:font-bold">
           Home
         </Link>{' '}
@@ -29,7 +29,7 @@ export const Route = createRootRoute({
         </Link>
       </div>
       <hr />
-      <main>
+      <main className="container mx-auto">
         <Outlet />
       </main>
       <TanStackRouterDevtools />

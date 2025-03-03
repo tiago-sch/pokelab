@@ -12,8 +12,8 @@ const PokedexList: FC<LazyComponentProps> = ({ scrollPosition }) => {
     <ul className="flex gap-4 flex-wrap justify-center p-6">
       {dex.map(pokemon => (
         <Link key={`poke-${pokemon.id}`} to="/pokemon/$name" params={{ name: pokemon.name }} >
-          <li className="w-50 h-50 card bg-amber-100 hover:bg-amber-200 shadow-sm">
-            <figure className="px-5 pt-10">
+          <li className="w-25 h-25 md:w-30 md:h-40 lg:w-55 lg:h-50 card bg-amber-100 hover:bg-amber-200 shadow-sm">
+            <figure className="px-5 pt-5 md:pt-8">
               <LazyLoadImage
                 alt={pokemon.name}
                 src={pokemon.artwork}
@@ -22,18 +22,16 @@ const PokedexList: FC<LazyComponentProps> = ({ scrollPosition }) => {
                 wrapperProps={{
                   style: { transitionDelay: "1s" },
                 }}
-                height={80}
-                width={80}
+                className="w-10 h-10 md:w-20 md:h-20 lg:w-30 lg:h-30"
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null;
                   currentTarget.alt = "Image not found";
-                  // currentTarget.width = 150;
                   currentTarget.src = pikaNotFound;
                 }}
               />
             </figure>
-            <div className="card-body items-center text-center px-2">
-              <h2 className="card-title">
+            <div className="card-body items-center text-center py-1 px-1">
+              <h2 className="card-title text-xs md:text-sm lg:text-lg">
                 {pokemon.name.replace("-", " ").toUpperCase()}
               </h2>
             </div>
