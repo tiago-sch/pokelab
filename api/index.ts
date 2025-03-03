@@ -106,6 +106,12 @@ router.get("/pokemon/:name", async (req, res) => {
               height
               weight
               name
+              forms {
+                id
+                url
+                name
+              }
+              is_default
               types {
                 type {
                   name

@@ -40,6 +40,12 @@ export type Move = {
   url: string;
 };
 
+export type PokemonForm = {
+  id: number;
+  url: string;
+  name: string;
+}
+
 export type PokemonResponse = {
   id: number
   sprites: Sprites;
@@ -54,4 +60,6 @@ export type PokemonResponse = {
   order: number;
   message: string;
   moves: Move[];
+  forms: PokemonForm[];
+  is_default: boolean;
 }

@@ -10,7 +10,7 @@ const PokedexProvider = ({ children }: PropsWithChildren) => {
 
   const fetchDex = useCallback(() => {
     setLoading(true);
-    fetchPokedex("1300").then(data => {
+    fetchPokedex("1025").then(data => {
       setPokedex(data);
       setLoading(false);
     });
